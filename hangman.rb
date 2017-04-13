@@ -47,13 +47,7 @@ class Game
 
   def start
     loop do
-      clear_screen
-      print_guesses
-      empty_line
-      # print_wrong_characters
-      # empty_line
-      print_hidden_word
-      empty_line
+      print_board
       check_guess(player.input)
       player_loses if @guesses_left.zero?
     end
@@ -65,17 +59,21 @@ class Game
 
   def check_guess(input)
     if input.length == secret_word.length
-      if secret_word_is_equal_to(input)
-        player_wins
-      else
-        player_loses
-      end
+      check_introduced_word(input)
     elsif secret_word.include?(input)
       add_characters(input)
       player_wins if secret_word_is_equal_to(hidden_word.join)
     else
       @wrong_characters << input unless @wrong_characters.include?(input)
       @guesses_left -= 1
+    end
+  end
+
+  def check_introduced_word(input)
+    if secret_word_is_equal_to(input)
+      player_wins
+    else
+      player_loses
     end
   end
 
@@ -89,6 +87,14 @@ class Game
                          .compact
 
     indexes.each { |index| hidden_word[index] = input }
+  end
+
+  def print_board
+    clear_screen
+    print_guesses
+    empty_line
+    print_hidden_word
+    empty_line
   end
 
   def clear_screen
@@ -112,14 +118,14 @@ class Game
   end
 
   def player_wins
-    clear_screen
+    print_board
     puts "You WIN!\n\n"
     puts "The correct word was: #{secret_word.join}\n\n"
     exit
   end
 
   def player_loses
-    clear_screen
+    print_board
     puts "You lose.\n\n"
     puts "The correct word was: #{secret_word.join}\n\n"
     exit
