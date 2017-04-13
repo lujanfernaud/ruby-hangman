@@ -23,24 +23,61 @@ class Dictionary
 end
 
 class Player
+  def input
+    puts "Introduce a letter:"
+    print "> "
+    gets.chomp.downcase
+  end
 end
 
 class Game
-  attr_reader :secret_word, :guesses
+  attr_accessor :hidden_word
+  attr_reader   :secret_word, :guesses_left, :player
 
   def initialize
-    @dictionary  = Dictionary.new('dictionary.txt')
-    @secret_word = @dictionary.sample
-    @guesses     = @secret_word.length
-    @player      = Player.new
+    @dictionary       = Dictionary.new('dictionary.txt')
+    @secret_word      = @dictionary.sample.split('')
+    @hidden_word      = create_hidden_word
+    @wrong_characters = []
+    @guesses_left     = @secret_word.length
+    @player           = Player.new
   end
 
   def setup
   end
 
   def start
-    puts secret_word
-    puts guesses
+    loop do
+      check_guess(player.input)
+      @guesses_left -= 1
+    end
+  end
+
+  def create_hidden_word
+    @secret_word.map { |letter| '_' if letter }
+  end
+
+  def check_guess(input)
+    if secret_word.include?(input)
+      add_characters(input)
+      print_hidden_word
+    else
+      @wrong_characters << input unless @wrong_characters.include?(input)
+      print_wrong_characters
+    end
+  end
+
+  def add_characters(input)
+    index = secret_word.index(input)
+    hidden_word[index] = input
+  end
+
+  def print_hidden_word
+    puts hidden_word.join(" ")
+  end
+
+  def print_wrong_characters
+    puts "Wrong characters: #{@wrong_characters.join(" ")}"
   end
 end
 
