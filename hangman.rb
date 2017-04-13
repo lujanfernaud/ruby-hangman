@@ -43,18 +43,29 @@ class Game
     @player           = Player.new
   end
 
-  def setup; end
-
   def start
     loop do
-      print_board
-      check_guess(player.input)
-      player_loses if @guesses_left.zero?
+      begin
+        print_board
+        check_guess(sanitize(player.input))
+        player_loses if @guesses_left.zero?
+      rescue Interrupt
+        exit_game
+      end
     end
   end
 
   def create_hidden_word
     @secret_word.map { |letter| '_' if letter }
+  end
+
+  def sanitize(input)
+    return if input.length == secret_word.length
+
+    case input
+    when 'exit' then exit_game
+    else input[0]
+    end
   end
 
   def check_guess(input)
@@ -128,6 +139,12 @@ class Game
     print_board
     puts "You lose.\n\n"
     puts "The correct word was: #{secret_word.join}\n\n"
+    exit
+  end
+
+  def exit_game
+    clear_screen
+    puts "Thanks for playing. Hope you liked it!\n\n"
     exit
   end
 end
