@@ -24,8 +24,8 @@ end
 
 class Player
   def input
-    puts "Introduce a letter:"
-    print "> "
+    puts 'Introduce a letter:'
+    print '> '
     gets.chomp.downcase
   end
 end
@@ -43,13 +43,16 @@ class Game
     @player           = Player.new
   end
 
-  def setup
-  end
+  def setup; end
 
   def start
     loop do
+      clear_screen
+      # print_wrong_characters
+      # empty_line
+      print_hidden_word
+      empty_line
       check_guess(player.input)
-      @guesses_left -= 1
     end
   end
 
@@ -60,16 +63,26 @@ class Game
   def check_guess(input)
     if secret_word.include?(input)
       add_characters(input)
-      print_hidden_word
+      @guesses_left -= 1
     else
       @wrong_characters << input unless @wrong_characters.include?(input)
-      print_wrong_characters
     end
   end
 
   def add_characters(input)
-    index = secret_word.index(input)
-    hidden_word[index] = input
+    indexes = secret_word.map
+                         .with_index { |char, idx| idx if char == input }
+                         .compact
+
+    indexes.each { |index| hidden_word[index] = input }
+  end
+
+  def clear_screen
+    system 'clear' || 'cls'
+  end
+
+  def empty_line
+    puts "\n"
   end
 
   def print_hidden_word
@@ -77,7 +90,7 @@ class Game
   end
 
   def print_wrong_characters
-    puts "Wrong characters: #{@wrong_characters.join(" ")}"
+    puts "Wrong characters: #{@wrong_characters.join(' ')}"
   end
 end
 
