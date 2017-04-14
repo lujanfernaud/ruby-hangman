@@ -90,7 +90,7 @@ class Game
   end
 
   def secret_word_is_equal_to(input)
-    secret_word.join("") == input
+    secret_word.join("").casecmp(input).zero?
   end
 
   def add_characters(input)
