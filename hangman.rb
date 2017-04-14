@@ -198,10 +198,23 @@ class Game
 
   def print_home_screen
     clear_screen
+    print_game_title
     puts "Type 'load' to open the last saved game."
     puts "Type 'save' during gameplay to save the game."
     puts "Type 'exit' to close the game.\n\n"
     puts "Press 'enter' to start."
+  end
+
+  def print_game_title
+    puts " _    _"
+    puts "| |  | |"
+    puts "| |__| | __ _ _ __   __ _ _ __ ___   __ _ _ __"
+    puts "|  __  |/ _` | '_ \\ / _` | '_ ` _ \\ / _` | '_ \\"
+    puts "| |  | | (_| | | | | (_| | | | | | | (_| | | | |"
+    puts "|_|  |_|\\__,_|_| |_|\\__, |_| |_| |_|\\__,_|_| |_|"
+    puts "                     __/ |"
+    puts "                    |___/"
+    puts "\n"
   end
 
   def print_board
