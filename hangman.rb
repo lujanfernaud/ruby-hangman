@@ -3,7 +3,6 @@
 # URL: http://www.theodinproject.com/courses/ruby-programming/lessons/file-i-o-and-serialization
 
 require "yaml"
-require "pry"
 
 class Dictionary
   attr_accessor :dictionary
