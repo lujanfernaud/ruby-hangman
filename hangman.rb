@@ -59,18 +59,6 @@ class Game
     @secret_word.map { |letter| "_" if letter }
   end
 
-  def check_guess(input)
-    if input.length == secret_word.length
-      check_introduced_word(input)
-    elsif secret_word.include?(input)
-      add_characters(input)
-      player_wins if secret_word_is_equal_to(hidden_word.join)
-    else
-      @wrong_characters << input unless @wrong_characters.include?(input)
-      @guesses_left -= 1
-    end
-  end
-
   def check_input(input)
     return if input.length == secret_word.length
 
@@ -81,16 +69,32 @@ class Game
     end
   end
 
-  def check_introduced_word(input)
-    if secret_word_is_equal_to(input)
-      player_wins
+  def check_guess(input)
+    if input_is_a_word(input)
+      check_introduced_word(input)
+    elsif character_is_in_secret_word(input)
+      add_characters(input)
+      player_wins if secret_word_is_equal_to(hidden_word.join)
     else
-      player_loses
+      @wrong_characters << input unless @wrong_characters.include?(input)
+      @guesses_left -= 1
     end
+  end
+
+  def input_is_a_word(input)
+    input.length == secret_word.length
+  end
+
+  def check_introduced_word(input)
+    secret_word_is_equal_to(input) ? player_wins : player_loses
   end
 
   def secret_word_is_equal_to(input)
     secret_word.join("").casecmp(input).zero?
+  end
+
+  def character_is_in_secret_word(input)
+    secret_word.any? { |character| character.casecmp(input).zero? }
   end
 
   def add_characters(input)
