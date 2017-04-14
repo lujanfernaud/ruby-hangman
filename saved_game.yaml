@@ -1,18 +1,31 @@
 ---
-:secret_word:
-- R
-- o
-- d
-- i
-- n
-:hidden_word:
-- _
-- o
-- _
-- i
-- _
-:wrong_characters:
-- a
+secret_word:
+- b
 - e
+- q
 - u
-:guesses_left: 2
+- e
+- a
+- t
+- h
+- a
+- l
+hidden_word:
+- _
+- e
+- _
+- u
+- e
+- a
+- t
+- _
+- a
+- _
+wrong_characters:
+- i
+- o
+- n
+- m
+- r
+- s
+guesses_left: 4

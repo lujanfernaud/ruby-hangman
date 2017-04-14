@@ -192,21 +192,21 @@ class Game
   end
 
   def load_game
-    yaml = YAML.load(File.open(game_file))
+    yaml = YAML.safe_load(File.open(game_file))
 
-    @secret_word      = yaml[:secret_word]
-    @hidden_word      = yaml[:hidden_word]
-    @wrong_characters = yaml[:wrong_characters]
-    @guesses_left     = yaml[:guesses_left]
+    @secret_word      = yaml["secret_word"]
+    @hidden_word      = yaml["hidden_word"]
+    @wrong_characters = yaml["wrong_characters"]
+    @guesses_left     = yaml["guesses_left"]
 
     start
   end
 
   def save_game
-    data = { secret_word:      @secret_word,
-             hidden_word:      @hidden_word,
-             wrong_characters: @wrong_characters,
-             guesses_left:     @guesses_left }
+    data = { "secret_word"      => @secret_word,
+             "hidden_word"      => @hidden_word,
+             "wrong_characters" => @wrong_characters,
+             "guesses_left"     => @guesses_left }
 
     yaml = YAML.dump(data)
 
