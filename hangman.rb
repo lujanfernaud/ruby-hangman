@@ -47,7 +47,7 @@ class Game
     loop do
       begin
         print_board
-        check_guess(sanitize(player.input))
+        check_guess(check_input(player.input))
         player_loses if @guesses_left.zero?
       rescue Interrupt
         exit_game
@@ -59,15 +59,6 @@ class Game
     @secret_word.map { |letter| "_" if letter }
   end
 
-  def sanitize(input)
-    return if input.length == secret_word.length
-
-    case input
-    when "exit" then exit_game
-    else input[0]
-    end
-  end
-
   def check_guess(input)
     if input.length == secret_word.length
       check_introduced_word(input)
@@ -77,6 +68,16 @@ class Game
     else
       @wrong_characters << input unless @wrong_characters.include?(input)
       @guesses_left -= 1
+    end
+  end
+
+  def check_input(input)
+    return if input.length == secret_word.length
+
+    case input
+    when "exit" then exit_game
+    when "save" then save_game
+    else input[0]
     end
   end
 
@@ -140,6 +141,11 @@ class Game
     puts "You lose.\n\n"
     puts "The correct word was: #{secret_word.join}\n\n"
     exit
+  end
+
+  def save_game
+    # Add logic to save game.
+    puts "Something is going to happen here."
   end
 
   def exit_game
