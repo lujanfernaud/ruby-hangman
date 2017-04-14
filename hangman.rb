@@ -38,7 +38,7 @@ class Game
     @dictionary       = Dictionary.new("dictionary.txt")
     @secret_word      = @dictionary.sample.split("")
     @hidden_word      = create_hidden_word
-    @wrong_characters = []
+    @wrong_characters = ["-"]
     @guesses_left     = @secret_word.length
     @player           = Player.new
     @game_file        = "saved_game.yaml"
@@ -93,7 +93,7 @@ class Game
       add_characters(input)
       player_wins if secret_word_is_equal_to(hidden_word.join)
     else
-      @wrong_characters << input unless @wrong_characters.include?(input)
+      add_character_to_wrong_characters(input)
       @guesses_left -= 1
     end
   end
@@ -122,73 +122,9 @@ class Game
     indexes.each { |index| hidden_word[index] = input }
   end
 
-  def print_home_screen
-    clear_screen
-    puts "Type 'load' to open the last saved game."
-    puts "Type 'save' during gameplay to save the game."
-    puts "Type 'exit' to close the game.\n\n"
-    puts "Press 'enter' to start."
-  end
-
-  def print_board
-    clear_screen
-    print_guesses
-    empty_line
-    print_hidden_word
-    empty_line
-    print_wrong_characters
-    print_game_saved
-    empty_line
-    print_input_message
-  end
-
-  def print_game_saved
-    return unless @game_saved
-    puts "\nThe game has been saved."
-    @game_saved = false
-  end
-
-  def clear_screen
-    system "clear" || "cls"
-  end
-
-  def empty_line
-    puts "\n"
-  end
-
-  def print_guesses
-    puts "Guesses left: #{@guesses_left}"
-  end
-
-  def print_hidden_word
-    puts hidden_word.join(" ")
-  end
-
-  def print_wrong_characters
-    puts "Wrong characters: #{@wrong_characters.join(" ")}"
-  end
-
-  def print_input_message
-    return if @game_finished
-    print "Introduce a letter:\n> "
-  end
-
-  def player_wins
-    @game_finished = true
-
-    print_board
-    puts "You WIN!\n\n"
-    puts "The correct word was: #{secret_word.join}\n\n"
-    exit
-  end
-
-  def player_loses
-    @game_finished = true
-
-    print_board
-    puts "You lose.\n\n"
-    puts "The correct word was: #{secret_word.join}\n\n"
-    exit
+  def add_character_to_wrong_characters(input)
+    @wrong_characters = [] if @guesses_left == @secret_word.length
+    @wrong_characters << input unless @wrong_characters.include?(input)
   end
 
   def load_game
@@ -217,10 +153,78 @@ class Game
     start
   end
 
+  def player_wins
+    @game_finished = true
+
+    print_board
+    puts "You WIN!\n\n"
+    puts "The correct word was: #{secret_word.join}\n\n"
+    exit
+  end
+
+  def player_loses
+    @game_finished = true
+
+    print_board
+    puts "You lose.\n\n"
+    puts "The correct word was: #{secret_word.join}\n\n"
+    exit
+  end
+
   def exit_game
     clear_screen
     puts "Thanks for playing. Hope you liked it!\n\n"
     exit
+  end
+
+  def print_home_screen
+    clear_screen
+    puts "Type 'load' to open the last saved game."
+    puts "Type 'save' during gameplay to save the game."
+    puts "Type 'exit' to close the game.\n\n"
+    puts "Press 'enter' to start."
+  end
+
+  def print_board
+    clear_screen
+    print_guesses
+    print_wrong_characters
+    empty_line
+    print_hidden_word
+    print_game_saved
+    empty_line
+    print_input_message
+  end
+
+  def clear_screen
+    system "clear" || "cls"
+  end
+
+  def print_guesses
+    puts "Guesses left: #{@guesses_left}"
+  end
+
+  def empty_line
+    puts "\n"
+  end
+
+  def print_hidden_word
+    puts hidden_word.join(" ")
+  end
+
+  def print_wrong_characters
+    puts "Wrong characters: #{@wrong_characters.join(" ")}"
+  end
+
+  def print_game_saved
+    return unless @game_saved
+    puts "\nThe game has been saved."
+    @game_saved = false
+  end
+
+  def print_input_message
+    return if @game_finished
+    print "Introduce a letter:\n> "
   end
 end
 
