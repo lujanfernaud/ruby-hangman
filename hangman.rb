@@ -2,7 +2,7 @@
 # Author: Luján Fernaud
 # URL: http://www.theodinproject.com/courses/ruby-programming/lessons/file-i-o-and-serialization
 
-require 'pry'
+require "pry"
 
 class Dictionary
   attr_accessor :dictionary
@@ -13,7 +13,7 @@ class Dictionary
   end
 
   def prepare_dictionary(filename)
-    @dictionary = File.read(filename).gsub(/\r\n/, ' ').split
+    @dictionary = File.read(filename).gsub(/\r\n/, " ").split
     @dictionary = @dictionary.select { |word| word.length > 4 && word.length < 13 }
   end
 
@@ -24,8 +24,8 @@ end
 
 class Player
   def input
-    puts 'Introduce a letter:'
-    print '> '
+    puts "Introduce a letter:"
+    print "> "
     gets.chomp.downcase
   end
 end
@@ -35,8 +35,8 @@ class Game
   attr_reader   :secret_word, :guesses_left, :player
 
   def initialize
-    @dictionary       = Dictionary.new('dictionary.txt')
-    @secret_word      = @dictionary.sample.split('')
+    @dictionary       = Dictionary.new("dictionary.txt")
+    @secret_word      = @dictionary.sample.split("")
     @hidden_word      = create_hidden_word
     @wrong_characters = []
     @guesses_left     = @secret_word.length
@@ -56,14 +56,14 @@ class Game
   end
 
   def create_hidden_word
-    @secret_word.map { |letter| '_' if letter }
+    @secret_word.map { |letter| "_" if letter }
   end
 
   def sanitize(input)
     return if input.length == secret_word.length
 
     case input
-    when 'exit' then exit_game
+    when "exit" then exit_game
     else input[0]
     end
   end
@@ -89,7 +89,7 @@ class Game
   end
 
   def secret_word_is_equal_to(input)
-    secret_word.join('') == input
+    secret_word.join("") == input
   end
 
   def add_characters(input)
@@ -109,7 +109,7 @@ class Game
   end
 
   def clear_screen
-    system 'clear' || 'cls'
+    system "clear" || "cls"
   end
 
   def empty_line
@@ -121,11 +121,11 @@ class Game
   end
 
   def print_hidden_word
-    puts hidden_word.join(' ')
+    puts hidden_word.join(" ")
   end
 
   def print_wrong_characters
-    puts "Wrong characters: #{@wrong_characters.join(' ')}"
+    puts "Wrong characters: #{@wrong_characters.join(" ")}"
   end
 
   def player_wins
