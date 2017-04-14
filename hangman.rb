@@ -116,7 +116,7 @@ class Game
 
   def add_characters(input)
     indexes = secret_word.map
-                         .with_index { |char, idx| idx if char == input }
+                         .with_index { |char, idx| idx if char.casecmp(input).zero? }
                          .compact
 
     indexes.each { |index| hidden_word[index] = input }
