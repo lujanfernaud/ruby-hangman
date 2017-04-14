@@ -79,6 +79,7 @@ class Game
     case input
     when "exit" then exit_game
     when "save" then save_game
+    when ""     then "_"
     else input[0]
     end
   end
