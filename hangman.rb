@@ -2,6 +2,7 @@
 # Author: Luján Fernaud
 # URL: http://www.theodinproject.com/courses/ruby-programming/lessons/file-i-o-and-serialization
 
+require "yaml"
 require "pry"
 
 class Dictionary
@@ -23,15 +24,15 @@ class Dictionary
 end
 
 class Player
-  def input(message: true)
-    print "Introduce a letter:\n> " if message
+  def input
     gets.chomp.downcase
   end
 end
 
 class Game
   attr_accessor :hidden_word
-  attr_reader   :secret_word, :guesses_left, :player
+  attr_reader   :secret_word, :guesses_left, :player,
+                :game_file,   :game_finished
 
   def initialize
     @dictionary       = Dictionary.new("dictionary.txt")
@@ -40,11 +41,14 @@ class Game
     @wrong_characters = []
     @guesses_left     = @secret_word.length
     @player           = Player.new
+    @game_file        = "saved_game.yaml"
+    @game_saved       = false
+    @game_finished    = false
   end
 
   def setup
     print_home_screen
-    check_action(player.input(message: false))
+    check_action(player.input)
   rescue Interrupt
     exit_game
   end
@@ -72,7 +76,7 @@ class Game
   end
 
   def check_input(input)
-    return if input.length == secret_word.length
+    return input if input.length == secret_word.length
 
     case input
     when "exit" then exit_game
@@ -118,6 +122,14 @@ class Game
     indexes.each { |index| hidden_word[index] = input }
   end
 
+  def print_home_screen
+    clear_screen
+    puts "Type 'load' to open the last saved game."
+    puts "Type 'save' during gameplay to save the game."
+    puts "Type 'exit' to close the game.\n\n"
+    puts "Press 'enter' to start."
+  end
+
   def print_board
     clear_screen
     print_guesses
@@ -125,15 +137,15 @@ class Game
     print_hidden_word
     empty_line
     print_wrong_characters
+    print_game_saved
     empty_line
+    print_input_message
   end
 
-  def print_home_screen
-    clear_screen
-    puts "Type 'load' to open the last saved game."
-    puts "Type 'save' during gameplay to save the game."
-    puts "Type 'exit' to close the game.\n\n"
-    puts "Press 'enter' to start."
+  def print_game_saved
+    return unless @game_saved
+    puts "\nThe game has been saved."
+    @game_saved = false
   end
 
   def clear_screen
@@ -156,7 +168,14 @@ class Game
     puts "Wrong characters: #{@wrong_characters.join(" ")}"
   end
 
+  def print_input_message
+    return if @game_finished
+    print "Introduce a letter:\n> "
+  end
+
   def player_wins
+    @game_finished = true
+
     print_board
     puts "You WIN!\n\n"
     puts "The correct word was: #{secret_word.join}\n\n"
@@ -164,6 +183,8 @@ class Game
   end
 
   def player_loses
+    @game_finished = true
+
     print_board
     puts "You lose.\n\n"
     puts "The correct word was: #{secret_word.join}\n\n"
@@ -171,13 +192,29 @@ class Game
   end
 
   def load_game
-    # Add logic to load game.
-    puts "Something is going to happen here."
+    yaml = YAML.load(File.open(game_file))
+
+    @secret_word      = yaml[:secret_word]
+    @hidden_word      = yaml[:hidden_word]
+    @wrong_characters = yaml[:wrong_characters]
+    @guesses_left     = yaml[:guesses_left]
+
+    start
   end
 
   def save_game
-    # Add logic to save game.
-    puts "Something is going to happen here."
+    data = { secret_word:      @secret_word,
+             hidden_word:      @hidden_word,
+             wrong_characters: @wrong_characters,
+             guesses_left:     @guesses_left }
+
+    yaml = YAML.dump(data)
+
+    File.open(game_file, "w") { |file| file.puts yaml }
+
+    @game_saved = true
+
+    start
   end
 
   def exit_game

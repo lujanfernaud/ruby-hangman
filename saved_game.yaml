@@ -1,0 +1,18 @@
+---
+:secret_word:
+- R
+- o
+- d
+- i
+- n
+:hidden_word:
+- _
+- o
+- _
+- i
+- _
+:wrong_characters:
+- a
+- e
+- u
+:guesses_left: 2
