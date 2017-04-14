@@ -23,9 +23,8 @@ class Dictionary
 end
 
 class Player
-  def input
-    puts "Introduce a letter:"
-    print "> "
+  def input(message: true)
+    print "Introduce a letter:\n> " if message
     gets.chomp.downcase
   end
 end
@@ -43,6 +42,11 @@ class Game
     @player           = Player.new
   end
 
+  def setup
+    print_home_screen
+    check_action(player.input(message: false))
+  end
+
   def start
     loop do
       begin
@@ -57,6 +61,16 @@ class Game
 
   def create_hidden_word
     @secret_word.map { |letter| "_" if letter }
+  end
+
+  def check_action(input)
+    start if input == ""
+
+    case input
+    when "load" then load_game
+    when "exit" then exit_game
+    else start
+    end
   end
 
   def check_input(input)
@@ -115,6 +129,14 @@ class Game
     empty_line
   end
 
+  def print_home_screen
+    clear_screen
+    puts "Type 'load' to open the last saved game."
+    puts "Type 'save' during gameplay to save the game."
+    puts "Type 'exit' to close the game.\n\n"
+    puts "Press 'enter' to start."
+  end
+
   def clear_screen
     system "clear" || "cls"
   end
@@ -149,6 +171,11 @@ class Game
     exit
   end
 
+  def load_game
+    # Add logic to load game.
+    puts "Something is going to happen here."
+  end
+
   def save_game
     # Add logic to save game.
     puts "Something is going to happen here."
@@ -161,4 +188,4 @@ class Game
   end
 end
 
-Game.new.start
+Game.new.setup
