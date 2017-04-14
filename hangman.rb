@@ -154,22 +154,27 @@ class Game
   end
 
   def player_wins
-    @game_finished = true
-
-    print_board
-    puts "You WIN!\n\n"
-    puts "The correct word was: #{secret_word.join}\n\n"
-    print "Play again? (y/n)?\n> "
-    play_again
+    result("player_wins")
   end
 
   def player_loses
+    result("player_loses")
+  end
+
+  def result(result)
     @game_finished = true
 
     print_board
-    puts "You lose.\n\n"
+
+    if result == "player_wins"
+      puts "You WIN!\n\n"
+    else
+      puts "You lose.\n\n"
+    end
+
     puts "The correct word was: #{secret_word.join}\n\n"
     print "Play again? (y/n)?\n> "
+
     play_again
   end
 

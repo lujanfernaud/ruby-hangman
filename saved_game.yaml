@@ -1,25 +1,22 @@
 ---
 secret_word:
-- d
-- e
-- x
-- t
-- e
 - r
-- o
 - u
-- s
+- b
+- b
+- l
+- e
 hidden_word:
 - _
-- e
-- _
-- _
-- e
-- _
-- o
 - u
 - _
+- _
+- _
+- e
 wrong_characters:
 - a
 - i
-guesses_left: 7
+- o
+- n
+- m
+guesses_left: 1
