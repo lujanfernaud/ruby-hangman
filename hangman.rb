@@ -45,17 +45,15 @@ class Game
   def setup
     print_home_screen
     check_action(player.input(message: false))
+  rescue Interrupt
+    exit_game
   end
 
   def start
     loop do
-      begin
-        print_board
-        check_guess(check_input(player.input))
-        player_loses if @guesses_left.zero?
-      rescue Interrupt
-        exit_game
-      end
+      print_board
+      check_guess(check_input(player.input))
+      player_loses if @guesses_left.zero?
     end
   end
 
