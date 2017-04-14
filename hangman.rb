@@ -159,7 +159,8 @@ class Game
     print_board
     puts "You WIN!\n\n"
     puts "The correct word was: #{secret_word.join}\n\n"
-    exit
+    print "Play again? (y/n)?\n> "
+    play_again
   end
 
   def player_loses
@@ -168,7 +169,20 @@ class Game
     print_board
     puts "You lose.\n\n"
     puts "The correct word was: #{secret_word.join}\n\n"
-    exit
+    print "Play again? (y/n)?\n> "
+    play_again
+  end
+
+  def play_again
+    loop do
+      case gets.chomp.downcase
+      when "y" then Game.new.start
+      when "n" then exit_game
+      else
+        print_board
+        print "Please type 'y' or 'n'.\n> "
+      end
+    end
   end
 
   def exit_game
