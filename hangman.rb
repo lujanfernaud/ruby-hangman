@@ -111,6 +111,8 @@ class Game
     empty_line
     print_hidden_word
     empty_line
+    print_wrong_characters
+    empty_line
   end
 
   def clear_screen
